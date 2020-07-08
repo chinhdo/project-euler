@@ -114,8 +114,6 @@ function p7_10001stPrime(): number {
     n += 2;
   }
 
-  console.log(primes);
-
   return primes[primes.length - 1];
 }
 
@@ -154,6 +152,5 @@ function p8_largestProduct(): number {
 
   return max;
 }
-
 
 export default App;
