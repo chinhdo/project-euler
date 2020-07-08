@@ -5,6 +5,7 @@ function App() {
   return (
     <div className="App">
       <h1>Solutions</h1>
+      <p>For source code see <a href="https://github.com/chinhdo/project-euler/blob/master/src/App.tsx">GitHub</a></p>
       <h2>Problem 5 - Smallest multiple</h2>
       <div>
         <p>2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder. What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?</p>
