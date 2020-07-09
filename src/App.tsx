@@ -194,7 +194,9 @@ function p9(): number {
   return -1;
 }
 
-// Answer is 142913828922
+// Summation of primes
+// The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+// Find the sum of all the primes below two million.
 function p10(): number {
   const max = 2000000;
 
