@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 
 function App() {
+  doIt();
   return (
     <div className="App">
       <h1>Solutions</h1>
@@ -64,6 +65,10 @@ function App() {
         <h2>Problem 10 - Summation of primes</h2>
         <p>The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17. Find the sum of all the primes below two million.</p>
         <p className="answer">{time(p10)}</p>
+      </div>
+      <div>
+        <h2>LeetCode - two-sum</h2>
+        <p className="answer">{time(leetCode)}</p>
       </div>
     </div>
   );
@@ -235,6 +240,93 @@ function p10(): number {
     }
   }
 }
+
+class ListNode {
+  val: number
+  next: ListNode | null
+  constructor(val?: number, next?: ListNode | null) {
+    this.val = (val === undefined ? 0 : val)
+    this.next = (next === undefined ? null : next)
+  }
+}
+
+function leetCode() {
+  // const l1 = new ListNode(8, new ListNode(9, new ListNode(9)));
+  const l1 = new ListNode(5);
+  const l2 = new ListNode(5);
+  return JSON.stringify(addTwoNumbers(l1, l2));
+}
+
+function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+  const ret = new ListNode();
+
+  let n1 = l1;
+  let n2 = l2;
+  let n3 = ret;
+
+  let carry = 0;
+  do {
+    n3.val = carry;
+    carry = 0;
+
+    if (n1) {
+      n3.val += n1?.val;
+      n1 = n1.next;
+    }
+
+    if (n2) {
+      n3.val += n2.val;
+      n2 = n2.next;
+    }
+
+    // carry
+    if (n3.val >= 10) {
+      n3.val = n3.val - 10;
+      carry = 1;
+    }
+
+    if (!n1 && !n2) {
+      break;
+    }
+
+    n3.next = new ListNode();
+    n3 = n3.next;
+  } while (true);
+
+  if (carry > 0) {
+    n3.next = new ListNode(carry);
+  }
+  return ret;
+};
+
+function doIt() {
+  lengthOfLongestSubstring(" ");
+  lengthOfLongestSubstring("dvdf");
+  lengthOfLongestSubstring("aabaab!bb");
+}
+
+
+function lengthOfLongestSubstring(s: string): number {
+  let longest = "";
+  let curr = "";
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    const p = curr.indexOf(ch);
+
+    if (p < 0) {
+      curr += ch;
+      if (curr.length > longest.length) {
+        longest = curr;
+      }  
+    }
+    else {
+      curr = curr.substr(p + 1) + ch;
+    }
+
+  }
+
+  return longest.length;
+};
 
 function sieveOfAtkin(limit: number): boolean[] {
   var limitSqrt = Math.sqrt(limit);
