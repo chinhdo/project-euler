@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { isMainThread } from 'worker_threads';
 
 function App() {
   doIt();
@@ -251,11 +252,131 @@ class ListNode {
 }
 
 function leetCode() {
-  // const l1 = new ListNode(8, new ListNode(9, new ListNode(9)));
-  const l1 = new ListNode(5);
-  const l2 = new ListNode(5);
-  return JSON.stringify(addTwoNumbers(l1, l2));
+  const a = [23, 26, 31, 35];
+  const b = [3, 5, 7, 9, 11, 16];
+
+  const s1 = findMedianSortedArrays(a, b);
+  console.log('S1: ' + s1);
+
+  const s2 = findMedianSortedArray2(a, b);
+  console.log('S2: ' + s2);
 }
+
+function findMedianSortedArray2(nums1: number[], nums2: number[]): number {
+  if(nums1.length > nums2.length) return findMedianSortedArrays(nums2, nums1)
+  let x = nums1.length
+  let y = nums2.length
+  let low = 0, high = x
+  while(low <= high) {
+      const partitionX = (high + low) >> 1
+      const partitionY = ((x + y + 1) >> 1) - partitionX
+      
+      const maxX = partitionX === 0 ? Number.NEGATIVE_INFINITY : nums1[partitionX - 1]
+      const maxY = partitionY === 0 ? Number.NEGATIVE_INFINITY : nums2[partitionY - 1]
+      
+      const minX = partitionX === nums1.length ? Number.POSITIVE_INFINITY : nums1[partitionX]
+      const minY = partitionY === nums2.length ? Number.POSITIVE_INFINITY : nums2[partitionY ]
+      
+      if(maxX <= minY && maxY <= minX) {
+          const lowMax = Math.max(maxX, maxY)
+          if( (x + y) % 2 === 1)
+              return lowMax
+          return (lowMax + Math.min(minX, minY)) / 2
+      } else if(maxX < minY) {
+          low = partitionX + 1
+      } else 
+          high = partitionX - 1
+  }
+
+  return -1;
+
+  // const a = nums1;
+  // const b = nums2;
+  // console.log(a);
+  // console.log(b);
+
+  // const totalNumbers = a.length + b.length;
+
+  // let p1 = Math.round(a.length / 2); // Start artition in the middle of first array
+  // let p2 = Math.trunc(totalNumbers / 2) - p1;
+
+  // let iters = 0;
+  // let median = -1;
+  // let done = false;
+  // while (! done) {
+  //   console.log('Partitions', p1, p2);
+  //   let a1 = a[p1 -1], a2 = a[p1], b1 = b[p2 - 1], b2 = b[p2];
+
+  //   if (a2 === undefined) {a2 = a1;}
+  //   if (b1 === undefined) {b1 = b2;}
+  //   console.log(a1, a2, '-', b1, b2);
+
+  //   if (p1 === 0 || p2 === b.length) {
+  //     done = true;
+  //   }
+  //   else if (a1 > b1) {
+  //     p1 --;
+  //     p2 ++;
+  //   }
+  //   else {
+  //     done = true;
+  //   }
+
+  //   if ()
+
+  //   median = (Math.max(a1, b1) + Math.min(a2, b2)) / 2;
+
+  //   iters ++;
+  //   if (iters > 10) break; // TODO remove
+  // }
+
+  // return median;
+}
+
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+  let a = 0; // index into nums1
+  let b = 0; // index into nums2
+  let count = 0;
+  const totalNumbers = nums1.length + nums2.length;
+
+  const temp = [];
+  
+  while (count <= (totalNumbers) / 2) {
+    let nextNum = 0;
+    // Get next number
+    if (a >= nums1.length) {
+      nextNum = nums2[b];
+      b++;
+    } else if (b >= nums2.length) {
+      nextNum = nums1[a];
+      a++;
+    } else {
+      if (nums1[a] < nums2[b]) {
+        nextNum = nums1[a];
+        a++;
+      }
+      else {
+        nextNum = nums2[b];
+        b++;
+      }
+    }
+
+    temp.push(nextNum);
+
+    count ++;
+  }
+
+  let median = -1;
+  if (totalNumbers % 2 === 0) {
+    // Even numbers - average of two middle
+    median = (temp[temp.length - 2] + temp[temp.length - 1]) / 2;
+  }
+  else {
+    median = temp[temp.length -1];
+  }
+
+  return median;
+};
 
 function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
   const ret = new ListNode();
